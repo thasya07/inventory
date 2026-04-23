@@ -1,0 +1,266 @@
+### Inventory Management System - API Testing
+
+@baseUrl = http://localhost:8080/api/v1
+
+### ==================== ITEM ENDPOINTS ====================
+
+### Create a new item with initial stock
+POST {{baseUrl}}/items
+Content-Type: application/json
+
+{
+  "item": {
+    "name": "Wireless Headphones",
+    "sku": "HEAD-001",
+    "description": "Premium wireless headphones with noise cancellation",
+    "basePrice": 149.99
+  },
+  "stock": {
+    "quantity": 75,
+    "reserved": 0,
+    "reorderLevel": 20
+  }
+}
+
+### Get all items
+GET {{baseUrl}}/items
+
+### Get item by ID (replace {id} with actual ID)
+GET {{baseUrl}}/items/1
+
+### Get item by SKU
+GET {{baseUrl}}/items/sku/TSHIRT-001
+
+### Update item
+PUT {{baseUrl}}/items/1
+Content-Type: application/json
+
+{
+  "name": "Classic Cotton T-Shirt",
+  "basePrice": 24.99
+}
+
+### Check if item is in stock
+GET {{baseUrl}}/items/1/in-stock
+
+### Reserve stock for an item
+POST {{baseUrl}}/items/1/reserve
+Content-Type: application/json
+
+{
+  "quantity": 10
+}
+
+### Release reserved stock
+POST {{baseUrl}}/items/1/release-reserved
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+### Deduct stock (actual sale)
+POST {{baseUrl}}/items/1/deduct
+Content-Type: application/json
+
+{
+  "quantity": 3
+}
+
+### Add stock (restock)
+POST {{baseUrl}}/items/1/add
+Content-Type: application/json
+
+{
+  "quantity": 25
+}
+
+### Delete item
+DELETE {{baseUrl}}/items/1
+
+### ==================== ITEM VARIANT ENDPOINTS ====================
+
+### Create a variant for an item
+POST {{baseUrl}}/items/1/variants
+Content-Type: application/json
+
+{
+  "variant": {
+    "name": "Black Large T-Shirt",
+    "color": "Black",
+    "size": "L",
+    "description": "Large size in black",
+    "price": 19.99
+  },
+  "stock": {
+    "quantity": 35,
+    "reserved": 0,
+    "reorderLevel": 8
+  }
+}
+
+### Get all variants of an item
+GET {{baseUrl}}/items/1/variants
+
+### Get specific variant
+GET {{baseUrl}}/items/1/variants/1
+
+### Update variant
+PUT {{baseUrl}}/items/1/variants/1
+Content-Type: application/json
+
+{
+  "name": "Updated Variant Name",
+  "price": 21.99
+}
+
+### Check if variant is in stock
+GET {{baseUrl}}/items/1/variants/1/in-stock
+
+### Reserve variant stock
+POST {{baseUrl}}/items/1/variants/1/reserve
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+### Release reserved variant stock
+POST {{baseUrl}}/items/1/variants/1/release-reserved
+Content-Type: application/json
+
+{
+  "quantity": 2
+}
+
+### Deduct variant stock
+POST {{baseUrl}}/items/1/variants/1/deduct
+Content-Type: application/json
+
+{
+  "quantity": 2
+}
+
+### Add variant stock
+POST {{baseUrl}}/items/1/variants/1/add
+Content-Type: application/json
+
+{
+  "quantity": 15
+}
+
+### Delete variant
+DELETE {{baseUrl}}/items/1/variants/1
+
+### ==================== STOCK MANAGEMENT ENDPOINTS ====================
+
+### Get all stocks
+GET {{baseUrl}}/stocks
+
+### Get stock by ID
+GET {{baseUrl}}/stocks/1
+
+### Get stock for a specific item
+GET {{baseUrl}}/stocks/item/1
+
+### Update stock details
+PUT {{baseUrl}}/stocks/1
+Content-Type: application/json
+
+{
+  "quantity": 200,
+  "reorderLevel": 30
+}
+
+### Get low stock items (items below reorder level)
+GET {{baseUrl}}/stocks/alerts/low-stock
+
+### Get out of stock items (items with zero available quantity)
+GET {{baseUrl}}/stocks/alerts/out-of-stock
+
+### ==================== VARIANT STOCK ENDPOINTS ====================
+
+### Get all variant stocks
+GET {{baseUrl}}/variant-stocks
+
+### Get variant stock by ID
+GET {{baseUrl}}/variant-stocks/1
+
+### Get stock for a specific variant
+GET {{baseUrl}}/variant-stocks/variant/1
+
+### Update variant stock details
+PUT {{baseUrl}}/variant-stocks/1
+Content-Type: application/json
+
+{
+  "quantity": 100,
+  "reorderLevel": 15
+}
+
+### Get low stock variants
+GET {{baseUrl}}/variant-stocks/alerts/low-stock
+
+### Get out of stock variants
+GET {{baseUrl}}/variant-stocks/alerts/out-of-stock
+
+### ==================== WORKFLOW EXAMPLES ====================
+
+### Example 1: Complete Order Fulfillment Workflow
+
+### Step 1: Check if item is in stock
+GET {{baseUrl}}/items/1/in-stock
+
+### Step 2: Reserve stock for the order
+POST {{baseUrl}}/items/1/reserve
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+### Step 3: Check current stock details
+GET {{baseUrl}}/stocks/item/1
+
+### Step 4: Deduct stock when order is confirmed
+POST {{baseUrl}}/items/1/deduct
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+### Example 2: Handle Order Cancellation
+
+### Step 1: Release the reserved stock
+POST {{baseUrl}}/items/1/release-reserved
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+### Example 3: Receive New Shipment
+
+### Step 1: Check current stock
+GET {{baseUrl}}/stocks/item/1
+
+### Step 2: Add new stock
+POST {{baseUrl}}/items/1/add
+Content-Type: application/json
+
+{
+  "quantity": 100
+}
+
+### Step 3: Verify new stock level
+GET {{baseUrl}}/stocks/item/1
+
+### Example 4: Monitor Low Stock Items
+
+### Get all items that are running low on stock
+GET {{baseUrl}}/stocks/alerts/low-stock
+
+### Get all out of stock items
+GET {{baseUrl}}/stocks/alerts/out-of-stock
+
