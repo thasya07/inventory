@@ -1,6 +1,6 @@
 # Quick Start - Inventory API
 
-This guide explains how to run the application locally and provides a few common API examples to get you started. It focuses on practical usage with concise examples and notes about validation and expected responses.
+This section shows how to run the application locally and try a few common API requests.
 
 ## Run the application
 
