@@ -115,10 +115,10 @@ Visit the H2 console at http://localhost:8080/h2-console
 
 ## What changed compared to the initial version
 
-- Controllers now accept well-defined request DTOs instead of plain JSON maps; this improves validation and type safety.
-- Stock endpoints return structured responses with the updated stock state so clients can immediately show correct inventory numbers.
-- Validation was added: request bodies are checked for required fields and positive quantities.
-- Basic logging (INFO/DEBUG) was added to service methods to make operations easier to trace during testing.
+- Controllers now use request DTOs instead of raw JSON maps for better validation and type safety.
+- Stock endpoints return structured responses with the latest inventory state.
+- Added validation to ensure required fields and positive quantities.
+- Basic logging added to service layer for easier debugging during development.
 
-If you'd like, I can also trim the README examples to a single page or add a short OpenAPI/Swagger spec — tell me how you want it presented.
+This setup should be enough to run and test the core inventory flows locally. You can extend it further depending on your needs.
 
